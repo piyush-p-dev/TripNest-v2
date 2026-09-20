@@ -1,6 +1,3 @@
-// Load environment variables from .env file
-require("dotenv").config();
-
 // Import required modules
 const express = require("express");
 const app = express();
@@ -15,6 +12,11 @@ const MongoStore = require("connect-mongo");
 const flash = require("connect-flash"); // Flash messages for success/error
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+
+// Load environment variables from .env file
+require("dotenv").config({
+  path: path.join(__dirname, "..", ".env"),
+});
 
 // User model with passport-local-mongoose
 const User = require("./models/user.js");
@@ -45,11 +47,11 @@ async function main() {
 
 // View engine and public/static file config
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "..", "views"));
 app.engine("ejs", ejsMate); // Use ejs-mate for layouts
 app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(methodOverride("_method")); // Support PUT/DELETE with query param
-app.use(express.static(path.join(__dirname, "/public"))); // Serve static files
+app.use(express.static(path.join(__dirname, "..", "/public"))); // Serve static files
 
 // Session configuration
 const store = MongoStore.create({
@@ -109,7 +111,7 @@ app.use("/admin", adminRoutes);
 app.post(
   "/webhook",
   express.raw({ type: "application/json" }),
-  require("./controllers/payment").handleStripeWebhook
+  require("./controllers/payment").handleStripeWebhook,
 );
 
 // Catch-all for undefined routes (404)
