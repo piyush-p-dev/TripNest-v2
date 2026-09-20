@@ -1,0 +1,126 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="page-listings">
+  <!-- filters -->
+  <div id="filters">
+    <a
+      href="/listings?category=trending"
+      class="filter <%= category === 'trending' ? 'active' : '' %>"
+    >
+      <div><i class="fa-solid fa-fire"></i></div>
+      <p>Trending</p>
+    </a>
+    <a
+      href="/listings?category=rooms"
+      class="filter <%= category === 'rooms' ? 'active' : '' %>"
+    >
+      <div><i class="fa-solid fa-bed"></i></div>
+      <p>Rooms</p>
+    </a>
+    <a
+      href="/listings?category=iconicCities"
+      class="filter <%= category === 'iconicCities' ? 'active' : '' %>"
+    >
+      <div><i class="fa-solid fa-city"></i></div>
+      <p>Iconic cities</p>
+    </a>
+    <a
+      href="/listings?category=mountains"
+      class="filter <%= category === 'mountains' ? 'active' : '' %>"
+    >
+      <div><i class="fa-solid fa-mountain-sun"></i></div>
+      <p>Mountains</p>
+    </a>
+    <a
+      href="/listings?category=castles"
+      class="filter <%= category === 'castles' ? 'active' : '' %>"
+    >
+      <div><i class="fa-brands fa-fort-awesome"></i></div>
+      <p>Castles</p>
+    </a>
+    <a
+      href="/listings?category=amazingPools"
+      class="filter <%= category === 'amazingPools' ? 'active' : '' %>"
+    >
+      <div><i class="fa-solid fa-person-swimming"></i></div>
+      <p>Amazing Pools</p>
+    </a>
+    <a
+      href="/listings?category=camping"
+      class="filter <%= category === 'camping' ? 'active' : '' %>"
+    >
+      <div><i class="fa-solid fa-campground"></i></div>
+      <p>Camping</p>
+    </a>
+    <a
+      href="/listings?category=farms"
+      class="filter <%= category === 'farms' ? 'active' : '' %>"
+    >
+      <div><i class="fa-solid fa-cow"></i></div>
+      <p>Farms</p>
+    </a>
+    <a
+      href="/listings?category=arctic"
+      class="filter <%= category === 'arctic' ? 'active' : '' %>"
+    >
+      <div><i class="fa-solid fa-snowflake"></i></div>
+      <p>Arctic</p>
+    </a>
+    <a
+      href="/listings?category=domes"
+      class="filter <%= category === 'domes' ? 'active' : '' %>"
+    >
+      <div><i class="fa-solid fa-igloo"></i></div>
+      <p>Domes</p>
+    </a>
+    <% if (category && category !== 'all') { %>
+    <a href="/listings" class="filter clear-filter">
+      <div><i class="fa-solid fa-xmark"></i></div>
+      <p>Clear</p>
+    </a>
+    <% } %>
+    <div class="filter tax-toggle">
+      <input type="checkbox" id="taxToggle" />
+      <label class="toggle-label" for="taxToggle"
+        >Display total after taxes</label
+      >
+    </div>
+  </div>
+
+  <% if (allListings.length === 0) { %>
+  <div class="no-results text-center mt-5">
+    <h4>No results found<%= search ? ` for "${search}"` : "" %>.</h4>
+    <p>Try adjusting your search or filters.</p>
+  </div>
+  <% } else { %>
+  <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% for(let listing of allListings){ %>
+    <a href="/listings/<%=listing._id%>" class="listing-link">
+      <div class="card col listing-card">
+        <img
+          src="<%=listing.images[0].url%>"
+          class="card-img-top"
+          alt="listing_image"
+          style="height: 20rem"
+        />
+        <div class="card-img-overlay"></div>
+        <div class="card-body">
+          <p class="card-text">
+            <b><%=listing.title %></b> <br />
+            <% const gstAmount = listing.price * 0.18; %> <% const total =
+            listing.price + gstAmount; %>
+            <span class="price-before"
+              >&#8377;<%= listing.price.toLocaleString("en-IN") %> / night</span
+            >
+            <span class="price-after d-none"
+              >&#8377;<%= Math.round(listing.price *
+              1.18).toLocaleString("en-IN") %> / night (incl. GST)</span
+            >
+          </p>
+        </div>
+      </div>
+    </a>
+    <% } %>
+  </div>
+  <% } %>
+</div>

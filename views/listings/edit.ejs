@@ -1,0 +1,218 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-3">
+  <div class="col-8 offset-2">
+    <br /><br />
+    <h3>Edit Your Listing</h3>
+    <form
+      method="POST"
+      action="/listings/<%= listing._id %>?_method=PUT"
+      novalidate
+      class="needs-validation"
+      enctype="multipart/form-data"
+    >
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          name="listing[title]"
+          value="<%= listing.title %>"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">Title looks good!</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea name="listing[description]" class="form-control" required>
+<%= listing.description %></textarea
+        >
+        <div class="invalid-feedback">Please enter a short description</div>
+      </div>
+
+      <!-- Existing Images -->
+      <div class="mb-3">
+        <label>Existing Images:</label>
+        <div class="d-flex flex-wrap gap-2">
+          <% listing.images.forEach((img, idx) => { %>
+          <div class="col-md-3 position-relative mb-2 d-flex flex-wrap gap-2">
+            <img
+              src="<%= img.url.replace('/upload', '/upload/w_250') %>"
+              class="img-fluid rounded"
+              style="height: 150px; width: 250px"
+            />
+            <div class="form-check position-absolute top-0 start-0 m-1">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="deleteImages[]"
+                value="<%= img.filename %>"
+                id="img<%= idx %>"
+              />
+              <label
+                class="form-check-label text-white bg-dark px-1 rounded"
+                for="img<%= idx %>"
+                >Delete</label
+              >
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Upload New Image -->
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload New Images</label>
+        <input
+          name="listing[newImages]"
+          type="file"
+          class="form-control"
+          multiple
+        />
+        <div class="invalid-feedback">Please select a file</div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input
+            name="listing[price]"
+            value="<%= listing.price %>"
+            type="number"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Price should be valid</div>
+        </div>
+
+        <div class="mb-3 col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input
+            name="listing[country]"
+            value="<%= listing.country %>"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Country name should be valid</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input
+          name="listing[location]"
+          value="<%= listing.location %>"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">Location should be valid</div>
+      </div>
+
+      <!-- Category Buttons -->
+      <div class="mb-3">
+        <label class="form-label">Categories</label>
+        <div
+          class="d-flex overflow-auto mb-3 gap-3 category-selector flex-wrap"
+        >
+          <!-- prettier-ignore -->
+          <% const categories = [ "trending", "rooms", "iconicCities",
+          "mountains", "castles", "amazingPools", "camping", "farms", "arctic",
+          "domes" ]; %> <% const categoryIcons = { trending: "fa-fire", rooms:
+          "fa-bed", iconicCities: "fa-city", mountains: "fa-mountain-sun",
+          castles: "fa-brands fa-fort-awesome", amazingPools: "fa-person-swimming",
+          camping: "fa-campground", farms: "fa-cow", arctic: "fa-snowflake",
+          domes: "fa-igloo" }; %> <% categories.forEach((cat) => { %>
+          <button
+            type="button"
+            class="btn category-btn <%= listing.category === cat ? 'active btn-dark' : 'btn-outline-dark' %>"
+            data-value="<%= cat %>"
+          >
+            <i class="fa-solid <%= categoryIcons[cat] %>"></i><br /><%=
+            cat.charAt(0).toUpperCase() + cat.slice(1) %>
+          </button>
+          <% }) %>
+        </div>
+        <input
+          type="hidden"
+          name="listing[category]"
+          id="categoryInput"
+          value="<%= listing.category %>"
+          required
+        />
+        <div class="invalid-feedback">Categories should be valid</div>
+      </div>
+
+      <!-- Amenity Buttons -->
+      <div class="mb-3">
+        <label class="form-label">Amenities</label>
+        <div class="d-flex flex-wrap gap-3">
+          <!-- prettier-ignore -->
+          <% const allAmenities = ["Wi-Fi", "Air Conditioning", "Kitchen", "Free Parking"]; %>
+          <% allAmenities.forEach((amenity) => { %>
+            
+          <%const isSelected = listing.amenities.includes(amenity);
+            const btnClass = isSelected ? 'btn-success' : 'btn-outline-secondary';
+            const icons = {
+              "Wi-Fi": "fa-wifi",
+              "Air Conditioning": "fa-wind",
+              "Kitchen": "fa-utensils",
+              "Free Parking": "fa-square-parking"
+            };
+          %>
+          <button
+            type="button"
+            class="btn <%= btnClass %> amenity-btn"
+            data-value="<%= amenity %>"
+          >
+            <i class="fa-solid <%= icons[amenity] %>"></i><br /><%= amenity %>
+          </button>
+          <% }) %>
+        </div>
+
+        <!-- Hidden checkboxes to submit amenities -->
+
+        <% allAmenities.forEach((amenity) => { %> <% const isChecked =
+        listing.amenities.includes(amenity); %> <input type="checkbox"
+        name="listing[amenities][]" value="<%= amenity %>" class="d-none
+        hidden-amenity" <%= isChecked ? 'checked' : '' %> /> <% }) %>
+      </div>
+
+      <button class="btn btn-dark add-btn mt-3 mb-3">Update</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Category button logic
+  const buttons = document.querySelectorAll(".category-btn");
+  const input = document.getElementById("categoryInput");
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      buttons.forEach((b) => b.classList.remove("active", "btn-dark"));
+      btn.classList.add("active", "btn-dark");
+      input.value = btn.dataset.value;
+    });
+  });
+
+  // Amenity button logic
+  document.querySelectorAll(".amenity-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const value = btn.getAttribute("data-value");
+      const hiddenCheckbox = Array.from(
+        document.querySelectorAll(".hidden-amenity")
+      ).find((input) => input.value === value);
+      if (btn.classList.contains("btn-success")) {
+        btn.classList.remove("btn-success");
+        btn.classList.add("btn-outline-secondary");
+        hiddenCheckbox.checked = false;
+      } else {
+        btn.classList.remove("btn-outline-secondary");
+        btn.classList.add("btn-success");
+        hiddenCheckbox.checked = true;
+      }
+    });
+  });
+</script>

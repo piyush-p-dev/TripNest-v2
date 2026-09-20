@@ -1,0 +1,51 @@
+<% layout("/layouts/boilerplate") %> <% layout("/layouts/boilerplate") %>
+
+<div class="profile-page">
+  <div class="container mt-5">
+    <h2>Your Profile</h2>
+    <div class="mb-3 d-flex align-items-start gap-3 flex-wrap">
+      <% if (user.avatar && user.avatar.url) { %>
+      <img
+        src="<%= user.avatar.url %>"
+        class="rounded-circle"
+        width="100"
+        height="100"
+        alt="Profile Picture"
+      />
+      <% } else { const firstLetter = user.username.charAt(0).toUpperCase(); %>
+      <div class="letter-avatar" title="User Initial"><%= firstLetter %></div>
+      <% } %>
+
+      <form
+        action="/profile/avatar"
+        method="POST"
+        enctype="multipart/form-data"
+        class="d-flex flex-column"
+      >
+        <input
+          type="file"
+          name="avatar"
+          class="form-control mt-1"
+          accept="image/*"
+        />
+        <button type="submit" class="btn btn-sm btn-outline-danger mt-2">
+          Update Photo
+        </button>
+      </form>
+    </div>
+
+    <p><strong>Username:</strong> <%= user.username %></p>
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <p><strong>Full Name:</strong> <%= user.fullName || 'Not provided' %></p>
+    <p><strong>Phone:</strong> <%= user.phone || 'Not provided' %></p>
+    <p><strong>Member Since:</strong> <%= user.createdAt.toDateString() %></p>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+      <a href="/profile/edit" class="btn btn-danger">Edit Profile</a>
+      <a href="/profile/change-password" class="btn btn-outline-danger"
+        >Change Password</a
+      >
+      <a href="/bookings/my" class="btn btn-outline-danger">View My Bookings</a>
+    </div>
+  </div>
+</div>

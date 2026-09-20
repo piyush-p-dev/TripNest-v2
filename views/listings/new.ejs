@@ -1,0 +1,268 @@
+<%layout("/layouts/boilerplate")%>
+
+<div class="row mt-3">
+  <div class="col-8 offset-2">
+    <br /><br />
+    <h3>Create a New Listing</h3>
+    <form
+      method="POST"
+      action="/listings"
+      novalidate
+      class="needs-validation"
+      enctype="multipart/form-data"
+    >
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          name="listing[title]"
+          placeholder="Add a catchy title"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">Title looks good!</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          name="listing[description]"
+          placeholder="enter description"
+          type="text"
+          class="form-control"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please enter a short description</div>
+      </div>
+
+      <!-- for image -->
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload Images</label>
+        <input
+          class="form-control"
+          type="file"
+          name="listing[images]"
+          id="image"
+          multiple
+          required
+        />
+        <div class="invalid-feedback">Please select a file</div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input
+            name="listing[price]"
+            placeholder="1200"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Price should be valid</div>
+        </div>
+
+        <div class="mb-3 col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input
+            name="listing[country]"
+            placeholder="India"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Country name should be valid</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input
+          name="listing[location]"
+          placeholder="Jaipur, Rajasthan"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">Location should be valid</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="categories" class="form-label">Categories</label>
+        <div
+          class="d-flex overflow-auto mb-3 gap-3 category-selector flex-wrap"
+        >
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="trending"
+          >
+            <i class="fa-solid fa-fire"></i><br />Trending
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="rooms"
+          >
+            <i class="fa-solid fa-bed"></i><br />Rooms
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="iconicCities"
+          >
+            <i class="fa-solid fa-city"></i><br />Iconic Cities
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="mountains"
+          >
+            <i class="fa-solid fa-mountain-sun"></i><br />Mountains
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="castles"
+          >
+            <i class="fa-brands fa-fort-awesome"></i><br />Castles
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="amazingPools"
+          >
+            <i class="fa-solid fa-person-swimming"></i><br />Amazing Pools
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="camping"
+          >
+            <i class="fa-solid fa-campground"></i><br />Camping
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="farms"
+          >
+            <i class="fa-solid fa-cow"></i><br />Farms
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="arctic"
+          >
+            <i class="fa-solid fa-snowflake"></i><br />Arctic
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark category-btn"
+            data-value="domes"
+          >
+            <i class="fa-solid fa-igloo"></i><br />Domes
+          </button>
+        </div>
+        <input
+          type="hidden"
+          name="listing[category]"
+          id="categoryInput"
+          required
+        />
+
+        <div class="invalid-feedback">Categories should be valid</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Amenities</label>
+        <div class="d-flex flex-wrap gap-3">
+          <button
+            type="button"
+            class="btn btn-outline-secondary amenity-btn"
+            data-value="Wi-Fi"
+          >
+            <i class="fa-solid fa-wifi"></i><br />Wi-Fi
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary amenity-btn"
+            data-value="Air Conditioning"
+          >
+            <i class="fa-solid fa-wind"></i><br />Air Conditioning
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary amenity-btn"
+            data-value="Kitchen"
+          >
+            <i class="fa-solid fa-utensils"></i><br />Kitchen
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary amenity-btn"
+            data-value="Free Parking"
+          >
+            <i class="fa-solid fa-square-parking"></i><br />Free Parking
+          </button>
+        </div>
+
+        <!-- Hidden checkboxes to actually submit the selected amenities -->
+        <input
+          type="checkbox"
+          name="listing[amenities][]"
+          value="Wi-Fi"
+          class="d-none hidden-amenity"
+        />
+        <input
+          type="checkbox"
+          name="listing[amenities][]"
+          value="Air Conditioning"
+          class="d-none hidden-amenity"
+        />
+        <input
+          type="checkbox"
+          name="listing[amenities][]"
+          value="Kitchen"
+          class="d-none hidden-amenity"
+        />
+        <input
+          type="checkbox"
+          name="listing[amenities][]"
+          value="Free Parking"
+          class="d-none hidden-amenity"
+        />
+      </div>
+
+      <button class="btn btn-dark add-btn mt-3">Add</button>
+    </form>
+  </div>
+</div>
+<script>
+  const buttons = document.querySelectorAll(".category-btn");
+  const input = document.getElementById("categoryInput");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      buttons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      input.value = btn.dataset.value;
+    });
+  });
+
+  document.querySelectorAll(".amenity-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const value = btn.getAttribute("data-value");
+      const hiddenCheckbox = Array.from(
+        document.querySelectorAll(".hidden-amenity")
+      ).find((input) => input.value === value);
+
+      if (btn.classList.contains("btn-success")) {
+        btn.classList.remove("btn-success");
+        btn.classList.add("btn-outline-secondary");
+        hiddenCheckbox.checked = false;
+      } else {
+        btn.classList.remove("btn-outline-secondary");
+        btn.classList.add("btn-success");
+        hiddenCheckbox.checked = true;
+      }
+    });
+  });
+</script>

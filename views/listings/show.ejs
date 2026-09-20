@@ -1,0 +1,205 @@
+<% layout("/layouts/boilerplate") %>
+
+<script>
+  const mapToken = "<%= process.env.MAP_TOKEN %>";
+  const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
+</script>
+
+<div class="container mt-4 listing-page">
+  <!-- Listing Header -->
+  <div class="mb-4">
+    <h2><%= listing.title %></h2>
+    <p class="text-muted"><%= listing.location %>, <%= listing.country %></p>
+  </div>
+
+  <!-- Image Gallery -->
+  <div class="row mb-4">
+    <% listing.images.forEach((img) => { %>
+    <div class="col-md-4 mb-3">
+      <img src="<%= img.url %>" class="listing-gallery-img" />
+    </div>
+    <% }) %>
+  </div>
+
+  <!-- Main Info and Booking -->
+  <div class="row">
+    <!-- Info -->
+    <div class="col-md-7">
+      <div class="mb-3">
+        <div class="d-flex align-items-center mb-3">
+          <% if (listing.owner.avatar && listing.owner.avatar.url) { %>
+          <img
+            src="<%= listing.owner.avatar.url %>"
+            class="host-avatar me-2"
+            alt="Host Profile"
+          />
+          <% } else { %>
+          <div class="letter-avatar me-2">
+            <%= listing.owner.username?.charAt(0).toUpperCase() %>
+          </div>
+          <% } %>
+          <h5 class="mb-0">Hosted by <%= listing.owner.username %></h5>
+        </div>
+        <p><%= listing.description %></p>
+      </div>
+
+      <% if (listing.category) { %>
+      <div class="mb-3">
+        <span class="badge bg-category"><%= listing.category %></span>
+      </div>
+      <% } %>
+
+      <hr />
+
+      <!-- Amenities -->
+      <h4 class="section-title">What’s included</h4>
+      <div class="listing-amenities-grid">
+        <% listing.amenities.forEach(a => { %>
+        <div class="amenity-item">
+          <% if (a === 'Wi-Fi') { %>
+          <i class="fas fa-wifi icon"></i>
+          <% } else if (a === 'Air Conditioning') { %>
+          <i class="fas fa-wind icon"></i>
+          <% } else if (a === 'Kitchen') { %>
+          <i class="fas fa-utensils icon"></i>
+          <% } else if (a === 'Free Parking') { %>
+          <i class="fas fa-parking icon"></i>
+          <% } else { %>
+          <i class="fas fa-check-circle icon"></i>
+          <% } %>
+          <span><%= a %></span>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Booking -->
+    <div class="col-md-5">
+      <div class="card p-3 shadow-sm">
+        <h4>₹<%= listing.price.toLocaleString("en-IN") %> / night</h4>
+        <!-- prettier-ignore -->
+        <% if (currUser && (currUser._id.equals(listing.owner._id) || currUser.isAdmin)) { %>
+        <a
+          href="/listings/<%= listing._id %>/edit"
+          class="btn btn-outline-dark mt-2"
+          >Edit</a
+        >
+        <form
+          method="POST"
+          action="/listings/<%= listing._id %>?_method=DELETE"
+          class="mt-2"
+        >
+          <button
+            class="btn btn-outline-danger"
+            onclick="return confirm('Are you sure you want to Delete?')"
+          >
+            Delete
+          </button>
+        </form>
+        <% } else { %>
+        <form method="GET" action="/listings/<%= listing._id %>/bookings/new">
+          <button class="btn btn-danger w-100 mt-2">Reserve</button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews -->
+  <hr />
+  <div class="mt-4">
+    <h4>Reviews (<%= listing.reviews.length %>)</h4>
+    <% if (listing.reviews.length === 0) { %>
+    <p>No reviews yet.</p>
+    <% } %>
+
+    <div class="row">
+      <% listing.reviews.forEach((review) => { %>
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-2">
+              <% if (review.author.avatar?.url) { %>
+              <img
+                src="<%= review.author.avatar.url %>"
+                class="rounded-circle me-2 user-avatar"
+              />
+              <% } else { %>
+              <div class="letter-avatar me-2">
+                <%= review.author.username?.charAt(0).toUpperCase() %>
+              </div>
+              <% } %>
+              <h6 class="mb-0"><%= review.author.username %></h6>
+            </div>
+            <p
+              class="starability-result card-text"
+              data-rating="<%= review.rating %>"
+            ></p>
+            <p><%= review.comment %></p>
+            <!-- prettier-ignore -->
+            <% if (currUser && (currUser._id.equals(review.author._id) || currUser.isAdmin)) { %>
+            <form
+              method="POST"
+              action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+            >
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+
+    <% if (currUser) { %>
+    <hr />
+    <h5>Leave a Review</h5>
+    <form
+      action="/listings/<%= listing.id %>/reviews"
+      method="POST"
+      class="needs-validation"
+      novalidate
+    >
+      <div class="mb-3">
+        <label for="rating">Rating</label>
+        <fieldset class="starability-slot">
+          <% for (let i = 1; i <= 5; i++) { %>
+          <input
+            type="radio"
+            id="rate-<%= i %>"
+            name="review[rating]"
+            value="<%= i %>"
+          />
+          <label
+            for="rate-<%= i %>"
+            title="<%= ['Terrible', 'Not good', 'Average', 'Very good', 'Amazing'][i - 1] %>"
+            ><%= i %> star<%= i > 1 ? 's' : '' %></label
+          >
+          <% } %>
+        </fieldset>
+      </div>
+      <div class="mb-3">
+        <label for="comment">Comment</label>
+        <textarea
+          name="review[comment]"
+          class="form-control"
+          rows="3"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please add some comment for review</div>
+      </div>
+      <button class="btn btn-outline-dark">Submit</button>
+    </form>
+    <% } %>
+  </div>
+
+  <!-- Map -->
+  <hr />
+  <div class="mt-4">
+    <h4>Where you’ll be</h4>
+    <div id="map"></div>
+  </div>
+</div>
+
+<script src="/js/map.js"></script>
+<script src="/js/mapStyle.js"></script>

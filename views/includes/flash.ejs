@@ -1,0 +1,45 @@
+<% if (success && success.length) { %>
+<div class="container mt-3">
+  <div
+    class="alert alert-success alert-dismissible fade show text-center mx-auto"
+    role="alert"
+    style="max-width: 600px"
+  >
+    <%= success %>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+</div>
+<% } %> <% if (error && error.length) { %>
+<div class="container mt-3">
+  <div
+    class="alert alert-danger alert-dismissible fade show text-center mx-auto"
+    role="alert"
+    style="max-width: 600px"
+  >
+    <%= error %>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+</div>
+<% } %>
+
+<script>
+  // Apply auto-dismiss only for success
+  setTimeout(() => {
+    const successAlert = document.querySelector(".alert-success");
+    if (successAlert) {
+      successAlert.classList.remove("show");
+      successAlert.classList.add("fade");
+      setTimeout(() => successAlert.remove(), 500); // Wait for fade animation
+    }
+  }, 3000); // Auto-dismiss after 3s
+</script>

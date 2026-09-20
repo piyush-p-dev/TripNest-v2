@@ -1,0 +1,104 @@
+<div class="trip-navbar-wrapper">
+  <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="/listings">
+        <i class="fa-regular fa-compass"></i>
+        <span class="fw-bold fs-5 text-danger">TripNest</span>
+      </a>
+      <!-- Hamburger Toggle -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <!-- search -->
+        <div class="navbar-nav ms-auto">
+          <form class="d-flex" role="search" action="/listings" method="GET">
+            <input
+              class="form-control me-2 search-inp"
+              type="search"
+              name="search"
+              placeholder="Search destinations"
+            />
+            <button class="btn search-btn" type="submit">
+              <i class="fa-solid fa-magnifying-glass"></i>Search
+            </button>
+          </form>
+        </div>
+
+        <!-- dropdown -->
+        <div class="navbar-nav ms-auto align-items-center d-flex gap-2">
+          <li class="nav-item">
+            <a class="nav-link" href="/listings/new">Host Your Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+              href="#"
+              id="accountDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <% if (currUser && currUser.avatar && currUser.avatar.url) { %>
+              <img
+                src="<%= currUser.avatar.url %>"
+                alt="Profile"
+                class="rounded-circle"
+                style="width: 36px; height: 36px; object-fit: cover"
+              />
+              <% } else if (currUser) { %>
+              <div
+                class="rounded-circle bg-danger text-white d-flex justify-content-center align-items-center"
+                style="width: 36px; height: 36px; font-weight: 600"
+              >
+                <%= currUser.username[0].toUpperCase() %>
+              </div>
+              <% } else { %>
+              <i class="fa-solid fa-user-circle fa-xl"></i>
+              <% } %> <% if (currUser) { %>
+              <span class="fw-semibold"> <%= currUser.username %> </span>
+              <% } %>
+            </a>
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="accountDropdown"
+            >
+              <% if (!currUser) { %>
+              <li><a class="dropdown-item" href="/signup">Sign up</a></li>
+              <li><a class="dropdown-item" href="/login">Log in</a></li>
+              <% } else { %>
+              <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+              <li>
+                <a class="dropdown-item" href="/bookings/my">Your Trips</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/bookings/owner"
+                  >Host Bookings</a
+                >
+              </li>
+              <% if (currUser.isAdmin) { %>
+              <li>
+                <a
+                  class="dropdown-item text-danger fw-semibold"
+                  href="/admin/dashboard"
+                  >Admin Dashboard</a
+                >
+              </li>
+              <% } %>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item logout" href="/logout">Log out</a>
+              </li>
+              <% } %>
+            </ul>
+          </li>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
