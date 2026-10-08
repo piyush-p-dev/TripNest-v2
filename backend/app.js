@@ -12,6 +12,7 @@ const MongoStore = require("connect-mongo");
 const flash = require("connect-flash"); // Flash messages for success/error
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const cors = require("cors");
 
 // Load environment variables from .env file
 require("dotenv").config({
@@ -52,6 +53,12 @@ app.engine("ejs", ejsMate); // Use ejs-mate for layouts
 app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(methodOverride("_method")); // Support PUT/DELETE with query param
 app.use(express.static(path.join(__dirname, "..", "/public"))); // Serve static files
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 // Session configuration
 const store = MongoStore.create({
@@ -94,7 +101,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
-  res.locals.currUser = req.user;
+  res.locals.currUser = req.user || null;
   next();
 });
 

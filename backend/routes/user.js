@@ -14,6 +14,14 @@ const multer = require("multer");
 const { getStorage } = require("../cloudConfig");
 const uploadProfile = multer({ storage: getStorage("Profile") }); // case-sensitive folder
 
+router.get("/current", (req, res) => {
+  if (req.user) {
+    res.json(req.user);
+  } else {
+    res.json(null);
+  }
+});
+
 router
   .route("/signup")
   .get(userController.renderSignupFrom) //signup form
@@ -29,7 +37,7 @@ router
       failureRedirect: "/login",
       failureFlash: true,
     }),
-    userController.login
+    userController.login,
   );
 
 router.get("/logout", userController.logout);
@@ -38,7 +46,7 @@ router.post(
   "/profile/avatar",
   isLoggedIn,
   uploadProfile.single("avatar"), // ✅ now correctly uses the profile folder
-  userController.updateAvatar
+  userController.updateAvatar,
 );
 router.get("/profile/edit", isLoggedIn, userController.renderEditForm);
 router.post("/profile/edit", isLoggedIn, userController.updateProfile);
@@ -47,13 +55,13 @@ router.post("/profile/edit", isLoggedIn, userController.updateProfile);
 router.get(
   "/profile/change-password",
   isLoggedIn,
-  userController.renderChangePassword
+  userController.renderChangePassword,
 );
 router.post(
   "/profile/change-password",
   isLoggedIn,
   validateChangePassword,
-  userController.changePassword
+  userController.changePassword,
 );
 
 // for forgot password
