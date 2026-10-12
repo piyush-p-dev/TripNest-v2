@@ -11,12 +11,12 @@ router
   .route("/")
   //INDEX ROUTE
   .get(wrapAsync(listingController.index))
-  // Create Route
+  // Create Listings
   .post(
     isLoggedIn,
     validateListing,
     uploadListing.array("listing[images]", 5), // for 5images
-    wrapAsync(listingController.createListing)
+    wrapAsync(listingController.createListing),
   );
 
 //New Route
@@ -33,7 +33,7 @@ router
     validateListing,
     // upload.single("listing[image]"),
     uploadListing.array("listing[newImages]"),
-    wrapAsync(listingController.updateListing)
+    wrapAsync(listingController.updateListing),
   )
   //Delete Route
   .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
@@ -43,7 +43,7 @@ router.get(
   "/:id/edit",
   isLoggedIn,
   isOwner,
-  wrapAsync(listingController.renderEditForm)
+  wrapAsync(listingController.renderEditForm),
 );
 
 module.exports = router;
