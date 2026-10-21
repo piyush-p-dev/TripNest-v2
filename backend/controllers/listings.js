@@ -28,8 +28,8 @@ module.exports.index = async (req, res) => {
   }
 
   const allListings = await Listing.find(query);
-  res.render("listings/index.ejs", {
-    allListings,
+  res.json({
+    listings: allListings,
     category: category || "all",
     search: search || "",
   });
@@ -136,7 +136,7 @@ module.exports.updateListing = async (req, res) => {
     for (let filename of req.body.deleteImages) {
       await cloudinary.uploader.destroy(filename); // remove from Cloudinary
       listing.images = listing.images.filter(
-        (img) => img.filename !== filename
+        (img) => img.filename !== filename,
       ); // remove from DB
     }
   }
