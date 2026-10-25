@@ -10,3 +10,7 @@ export function getListings({ search = "", category = "all" } = {}) {
 
   return apiRequest(`/listings${query ? `?${query}` : ""}`);
 }
+
+export function getListing(id) {
+  return apiRequest(`/listings/${id}`);
+}

@@ -1,0 +1,28 @@
+function Payment() {
+  return (
+    <div className="container my-5">
+      <h2 className="mb-4">Payment Options</h2>
+
+      <p>
+        We use <strong>Stripe</strong> for secure payment processing.
+      </p>
+
+      <ul>
+        <li>✔️ All major debit and credit cards are accepted.</li>
+        <li>✔️ Secure and encrypted transactions.</li>
+        <li>
+          ✔️ Stripe test cards can be used for demo purposes. For example:
+          <br />
+          <code>Card Number: 4242 4242 4242 4242</code> (Any future date, any
+          3-digit CVC)
+        </li>
+        <li>
+          ✔️ You will be redirected to Stripe Checkout when paying for a
+          booking.
+        </li>
+      </ul>
+    </div>
+  );
+}
+
+export default Payment;

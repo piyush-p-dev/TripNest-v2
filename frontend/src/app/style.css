@@ -2,12 +2,8 @@
 
 body {
   font-family: "Plus Jakarta Sans", sans-serif !important;
-  display: flex;
-  flex-direction: column;
+
   min-height: 100vh;
-}
-.container {
-  flex: 1;
 }
 
 /* navbar */
@@ -73,7 +69,9 @@ body {
 .trip-navbar-wrapper .dropdown-menu .dropdown-item {
   padding: 0.6rem 1rem;
   color: #333;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .trip-navbar-wrapper .dropdown-menu .dropdown-item:hover {
@@ -191,7 +189,9 @@ body {
   background-color: #333;
   padding: 10px;
   border-radius: 50%;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
   cursor: pointer;
 }
 
@@ -958,7 +958,9 @@ body {
   border-radius: 12px;
   font-size: 1rem;
   background-color: white;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .contact-form form input:focus,
@@ -1126,4 +1128,14 @@ body {
   .services-header h1 {
     font-size: 32px;
   }
+}
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  min-height: 400px;
 }

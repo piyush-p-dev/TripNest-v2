@@ -1,0 +1,68 @@
+function About() {
+  return (
+    <div className="about-page">
+      <div className="about-hero">
+        <h1>Welcome to TripNest</h1>
+        <p>
+          We're building a better way to travel — one home, one stay, and one
+          experience at a time. With love, from India.
+        </p>
+      </div>
+
+      <div className="about-section">
+        <h2>Our Story</h2>
+        <p>
+          TripNest started as a passion project to connect travelers with
+          unique, welcoming places to stay. From apartments in the heart of
+          cities to cottages in the hills, our mission is to help people feel at
+          home wherever they go.
+        </p>
+        <p>
+          We're more than just a booking platform — we're a bridge between hosts
+          and explorers, powered by community and built on trust.
+        </p>
+      </div>
+
+      <div className="about-section">
+        <h2>Our Mission</h2>
+        <p>
+          To empower local hosts and offer guests memorable travel experiences
+          through accessible, comfortable, and secure short-term rentals.
+        </p>
+      </div>
+
+      <div className="about-section">
+        <h2>Our Journey So Far</h2>
+        <div className="stats-section">
+          <div className="stat-card">
+            <h3>300+</h3>
+            <p>Listings across India</p>
+          </div>
+          <div className="stat-card">
+            <h3>400+</h3>
+            <p>Bookings Completed</p>
+          </div>
+          <div className="stat-card">
+            <h3>40+</h3>
+            <p>Trusted Cities</p>
+          </div>
+          <div className="stat-card">
+            <h3>100k+</h3>
+            <p>Earned by Hosts</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="about-section">
+        <h2>Built by Passionate Creators</h2>
+        <p>
+          TripNest is developed and maintained by a team of enthusiastic
+          students and professionals who care deeply about technology, design,
+          and making travel personal again.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default About;

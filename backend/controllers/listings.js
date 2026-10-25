@@ -47,6 +47,7 @@ module.exports.renderNewForm = (req, res) => {
  */
 module.exports.showListing = async (req, res) => {
   const { id } = req.params;
+
   const listing = await Listing.findById(id)
     .populate({
       path: "reviews",
@@ -55,12 +56,31 @@ module.exports.showListing = async (req, res) => {
     .populate("owner");
 
   if (!listing) {
-    req.flash("error", "Listing you requested for does not exist!");
-    return res.redirect("/listings");
+    return res.status(404).json({
+      message: "Listing you requested does not exist!",
+    });
   }
 
-  res.render("listings/show", { listing });
+  res.json({ listing });
 };
+
+//replaced wth above react one
+// module.exports.showListing = async (req, res) => {
+//   const { id } = req.params;
+//   const listing = await Listing.findById(id)
+//     .populate({
+//       path: "reviews",
+//       populate: { path: "author" },
+//     })
+//     .populate("owner");
+
+//   if (!listing) {
+//     req.flash("error", "Listing you requested for does not exist!");
+//     return res.redirect("/listings");
+//   }
+
+//   res.render("listings/show", { listing });
+// };
 
 /**
  * Create a new listing with geolocation and image uploads.
