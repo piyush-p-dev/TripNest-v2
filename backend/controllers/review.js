@@ -5,19 +5,38 @@ const Review = require("../models/review");
  * Create a new review for a specific listing.
  */
 module.exports.createReview = async (req, res) => {
-  const listing = await Listing.findById(req.params.id); // Find the listing being reviewed
+  // Find the listing being reviewed
+  const listing = await Listing.findById(req.params.id);
 
-  const newReview = new Review(req.body.review); // Create a new review from form data
-  newReview.author = req.user._id; // Associate the review with the logged-in user
+  // Return an error if the listing doesn't exist
+  if (!listing) {
+    return res.status(404).json({
+      message: "Listing not found.",
+    });
+  }
 
-  listing.reviews.push(newReview); // Add the review to the listing's reviews array
+  // Create a new review from the submitted form data
+  const newReview = new Review(req.body.review);
 
-  await newReview.save(); // Save the review document
-  await listing.save(); // Save the updated listing
+  // Associate the review with the logged-in user
+  newReview.author = req.user._id;
+
+  // Add the review reference to the listing
+  listing.reviews.push(newReview);
+
+  // Save the review document
+  await newReview.save();
+
+  // Save the updated listing
+  await listing.save();
 
   console.log("new review saved");
-  req.flash("success", "New Review Created!");
-  res.redirect(`/listings/${listing._id}`); // Redirect back to the listing's page
+
+  // Return a JSON response for the React frontend
+  res.status(201).json({
+    message: "Review created successfully.",
+    review: newReview,
+  });
 };
 
 /**
@@ -27,11 +46,15 @@ module.exports.destroyReview = async (req, res) => {
   const { id, reviewId } = req.params;
 
   // Remove the review reference from the listing's reviews array
-  await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+  await Listing.findByIdAndUpdate(id, {
+    $pull: { reviews: reviewId },
+  });
 
   // Delete the actual review document from the database
   await Review.findByIdAndDelete(reviewId);
 
-  req.flash("success", "Review Deleted!");
-  res.redirect(`/listings/${id}`); // Redirect back to the listing's page
+  // Return a JSON response for the React frontend
+  res.json({
+    message: "Review deleted successfully.",
+  });
 };

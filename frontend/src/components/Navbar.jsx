@@ -12,7 +12,6 @@ function Navbar({ name }) {
         setCurrentUser(data);
       });
   }, []);
-  console.log(currentUser);
   return (
     <>
       <div className="trip-navbar-wrapper">

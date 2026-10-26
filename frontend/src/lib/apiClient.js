@@ -12,5 +12,8 @@ async function apiRequest(path, options = {}) {
 
   return response.json();
 }
+export function getCurrentUser() {
+  return apiRequest("/current");
+}
 
 export default apiRequest;

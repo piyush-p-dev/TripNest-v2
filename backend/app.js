@@ -51,6 +51,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "..", "views"));
 app.engine("ejs", ejsMate); // Use ejs-mate for layouts
 app.use(express.urlencoded({ extended: true })); // Parse form data
+app.use(express.json());
 app.use(methodOverride("_method")); // Support PUT/DELETE with query param
 app.use(express.static(path.join(__dirname, "..", "/public"))); // Serve static files
 app.use(
